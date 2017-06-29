@@ -1,0 +1,107 @@
+{
+  "task1params": [
+    {
+      "width": 30,
+      "height": 10,
+      "symbol": "X"
+    },
+    {
+      "width": 20,
+      "height": 5,
+      "symbol": "*"
+    }
+  ],
+  "task2params": [
+    {
+      "envelope1": {
+        "width": 3.1,
+        "height": 5.1
+      },
+      "envelope2": {
+        "width": 3,
+        "height": 5
+      }
+    }
+  ],
+  "task3params": [
+    {
+      "triangles": [
+        {
+          "vertices": "ABC",
+          "a": 10,
+          "b": 20,
+          "c": 22.36
+        },
+        {
+          "vertices": "DEF",
+          "a": 100,
+          "b": 200,
+          "c": 223.6
+        },
+        {
+          "vertices": "KLM",
+          "a": 1,
+          "b": 2,
+          "c": 2.236
+        },
+        {
+          "vertices": "OPQ",
+          "a": 3,
+          "b": 3,
+          "c": 3
+        }
+      ]
+    }
+  ],
+  "task4params": [
+    {
+      "number": 9123456789
+    },
+    {
+      "number": 12234444437
+    },
+    {
+      "number": 12388321
+    },
+    {
+      "number": 2505
+    },
+    {
+      "number": 12834432
+    },
+    {
+      "number": 55
+    },
+    {
+      "number": 505
+    }
+  ],
+  "task5params": [
+    {
+      "min": 1,
+      "max": 999999
+    },
+    {
+      "min": 1,
+      "max": 555
+    }
+  ],
+  "task6params": [
+    {
+      "length": 10,
+      "square": 1000
+    },
+    {
+      "length": 10,
+      "square": -1000
+    }
+  ],
+  "task7params": [
+    {
+      "context": "context1.txt"
+    },
+    {
+      "context": "context2.txt"
+    }
+  ]
+}
