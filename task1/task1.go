@@ -46,7 +46,7 @@ func validate(width, height int) (err error) {
 
 // Returns text plain chess board
 func ChessBoard(width, height int, symbol rune) (board string, err error) {
-	if err := validate(width, height); err != nil {
+	if err = validate(width, height); err != nil {
 		return "", err
 	}
 	for i := 0; i < height; i++ {

@@ -66,6 +66,7 @@ func main() {
 
 	task1.Demo(params.Params1)
 	task2.Demo(params.Params2)
+	return
 	task3.Demo(params.Params3)
 	task4.Demo(params.Params4)
 	task5.Demo(params.Params5)
