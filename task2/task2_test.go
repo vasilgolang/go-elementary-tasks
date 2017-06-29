@@ -19,28 +19,10 @@ var tests = []struct {
 	},
 }
 
-func TestValidate(t *testing.T) {
-	for _, test := range tests {
-		if err := Validate(test.input); (err == nil) != test.passError {
-			t.Errorf("passError: %v != %v", err == nil, test.passError)
-		}
-	}
-}
-
-func TestRun(t *testing.T) {
-	for _, test := range tests {
-		if canEnclose, minEnvelope, err := Run(test.input); (err == nil) != test.passError ||
-			canEnclose != test.canEnclose ||
-			minEnvelope != test.minEnvelope {
-			t.Errorf("Wrong results. We wait canEnclose %v instead %v, %d instead  %d\r\n",
-				canEnclose, test.canEnclose, minEnvelope, test.minEnvelope)
-		}
-	}
-}
 func TestCanEncloseEnvelopes(t *testing.T) {
 	for _, test := range tests {
-		if canEnclose, minEnvelope := canEncloseEnvelopes(test.input.Envelope1, test.input.Envelope2); test.passError &&
-			(canEnclose != test.canEnclose || minEnvelope != test.minEnvelope) {
+		canEnclose, minEnvelope, err := CanEncloseEnvelopes(test.input.Envelope1, test.input.Envelope2)
+		if (err == nil) && test.passError && (canEnclose != test.canEnclose || minEnvelope != test.minEnvelope) {
 			t.Errorf("Wrong results. We wait canEnclose %v instead %v, minEnvelope %d instead  %d\r\n",
 				canEnclose, test.canEnclose, minEnvelope, test.minEnvelope)
 		}
