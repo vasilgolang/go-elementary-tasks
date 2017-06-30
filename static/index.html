@@ -22,10 +22,7 @@
         $(document).ready(function () {
             // click on button submit
             $("#task1_run").on('click', function () {
-
-
                 var jsonData = ConvertForm1ToJSON('formTask1');
-                console.log(jsonData);
                 // send ajax
                 $.ajax({
                     url: '/task/1', // url where to submit the request
@@ -36,13 +33,11 @@
                         // you can see the result from the console
                         // tab of the developer tools
                         // "result-task-1
-                        $( "#result-task-1" ).html( result );
-
+                        $("#result-task-1").html(result);
                         console.log("Result:", result);
                     },
                     error: function (xhr, resp, text) {
                         console.log(xhr, resp, text);
-                        alert(resp);
                     }
                 })
             });
@@ -73,6 +68,38 @@
             <h4>Result</h4>
             <div class="panel-body">
                 <pre id="result-task-1">:)</pre>
+            </div>
+        </div>
+    </form>
+
+    <h2>Task 2 - Envelopes</h2>
+    <p>Please enter width and height for two envelopes.</p>
+    <form class="form-inline" id="formTask2">
+        <div>
+            <div class="form-group">
+                <label for="width1">Width:</label>
+                <input type="number" min="0" class="form-control" id="width1" placeholder="Enter width" name="width">
+            </div>
+            <div class="form-group">
+                <label for="height1">Height:</label>
+                <input type="number" class="form-control" id="height1" placeholder="Enter height" name="height">
+            </div>
+        </div>
+        <div>
+            <div class="form-group">
+                <label for="width2">Width:</label>
+                <input type="number" min="0" class="form-control" id="width2" placeholder="Enter width" name="width">
+            </div>
+            <div class="form-group">
+                <label for="height2">Height:</label>
+                <input type="number" class="form-control" id="height2" placeholder="Enter height" name="height">
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" id="task2_run">Run</button>
+        <div>
+            <h4>Result</h4>
+            <div class="panel-body">
+                <pre id="result-task-2">:)</pre>
             </div>
         </div>
     </form>
