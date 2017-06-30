@@ -96,9 +96,7 @@ func SortTriangles(triangles []Triangle) (names []string) {
 		})
 		fmt.Printf("%#v Area: %v\r\n", triangles[k], triangles[k].Square())
 	}
-
 	sort.Sort(sort.Reverse(areas)) // sort.Reverse() according to "Вывести треугольники в порядке _убывания_ их площади"
-
 	for _, v := range areas {
 		names = append(names, v.Triangle.Vertices)
 	}

@@ -16,6 +16,8 @@ import (
 	"io/ioutil"
 	"log"
 	"encoding/json"
+
+	"github.com/vasilgolang/go-elementary-tasks/webserver"
 )
 
 type Params struct {
@@ -29,6 +31,8 @@ type Params struct {
 }
 
 func main() {
+
+	webserver.Run()
 
 	if len(os.Args) < 2 {
 		fmt.Println("Runs tasks\r\n", os.Args[0], "filename\r\n  filename - must contain JSON format")
