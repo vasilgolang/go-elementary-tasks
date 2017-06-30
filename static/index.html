@@ -11,12 +11,30 @@
         function ConvertForm1ToJSON() {
             var array = $("#formTask1").serializeArray();
             var json = {};
-
             jQuery.each(array, function () {
                 json[this.name] = this.value || '';
             });
-
             return '{"width":' + json["width"] + ', "height":' + json["height"] + ', "symbol":"' + json["symbol"] + '"}';
+        }
+
+        function ConvertForm2ToJSON() {
+            var array = $("#formTask2").serializeArray();
+            var json = {};
+            jQuery.each(array, function () {
+                json[this.name] = this.value || '';
+
+            });
+            console.log(json);
+            return `{
+      "envelope1": {
+        "width": ` + json["e1width"] + `,
+        "height": ` + json["e1height"] + `
+      },
+      "envelope2": {
+        "width": ` + json["e2width"] + `,
+        "height": ` + json["e1height"] + `
+      }
+    }`;
         }
 
         $(document).ready(function () {
@@ -34,6 +52,27 @@
                         // tab of the developer tools
                         // "result-task-1
                         $("#result-task-1").html(result);
+                        console.log("Result:", result);
+                    },
+                    error: function (xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                })
+            });
+            $("#task2_run").on('click', function () {
+                var jsonData = ConvertForm2ToJSON('formTask2');
+                console.log("jsonData:", jsonData);
+                // send ajax
+                $.ajax({
+                    url: '/task/2', // url where to submit the request
+                    type: "POST", // type of action POST || GET
+                    dataType: 'text', // data type
+                    data: jsonData, // post data || get data
+                    success: function (result) {
+                        // you can see the result from the console
+                        // tab of the developer tools
+                        // "result-task-1
+                        $("#result-task-2").html(result);
                         console.log("Result:", result);
                     },
                     error: function (xhr, resp, text) {
@@ -77,22 +116,22 @@
     <form class="form-inline" id="formTask2">
         <div>
             <div class="form-group">
-                <label for="width1">Width:</label>
-                <input type="number" min="0" class="form-control" id="width1" placeholder="Enter width" name="width">
+                <label for="e1width">Width:</label>
+                <input type="number" min="0" class="form-control" id="e1width" placeholder="Enter width" name="e1width">
             </div>
             <div class="form-group">
-                <label for="height1">Height:</label>
-                <input type="number" class="form-control" id="height1" placeholder="Enter height" name="height">
+                <label for="e1height">Height:</label>
+                <input type="number" class="form-control" id="e1height" placeholder="Enter height" name="e1height">
             </div>
         </div>
         <div>
             <div class="form-group">
-                <label for="width2">Width:</label>
-                <input type="number" min="0" class="form-control" id="width2" placeholder="Enter width" name="width">
+                <label for="e2width">Width:</label>
+                <input type="number" min="0" class="form-control" id="e2width" placeholder="Enter width" name="e2width">
             </div>
             <div class="form-group">
-                <label for="height2">Height:</label>
-                <input type="number" class="form-control" id="height2" placeholder="Enter height" name="height">
+                <label for="e2height">Height:</label>
+                <input type="number" class="form-control" id="e2height" placeholder="Enter height" name="e2height">
             </div>
         </div>
         <button type="button" class="btn btn-default" id="task2_run">Run</button>
