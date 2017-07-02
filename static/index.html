@@ -32,7 +32,7 @@
       },
       "envelope2": {
         "width": ` + json["e2width"] + `,
-        "height": ` + json["e1height"] + `
+        "height": ` + json["e2height"] + `
       }
     }`;
         }
@@ -87,7 +87,7 @@
 <body>
 
 <div class="container">
-    <h2>Task 1 - Chess board</h2>
+    <h2>Task 1 - Chess board <i class="glyphicon glyphicon-knight"></i></h2>
     <p>Please enter width and height of chess board you want.</p>
     <form class="form-inline" id="formTask1">
         <div class="form-group">
@@ -111,7 +111,7 @@
         </div>
     </form>
 
-    <h2>Task 2 - Envelopes</h2>
+    <h2>Task 2 - Envelopes <i class="glyphicon glyphicon-envelope"></i></h2>
     <p>Please enter width and height for two envelopes.</p>
     <form class="form-inline" id="formTask2">
         <div>
@@ -131,10 +131,13 @@
             </div>
             <div class="form-group">
                 <label for="e2height">Height:</label>
-                <input type="number" class="form-control" id="e2height" placeholder="Enter height" name="e2height">
+                <input type="number" class="form-control" id="e2height" placeholder="Enter height" name="e2height" step="0.1">
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-default" id="task2_run">Run</button>
             </div>
         </div>
-        <button type="button" class="btn btn-default" id="task2_run">Run</button>
+
         <div>
             <h4>Result</h4>
             <div class="panel-body">

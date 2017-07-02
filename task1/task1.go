@@ -62,3 +62,25 @@ func ChessBoard(width, height int, symbol rune) (board string, err error) {
 	}
 	return
 }
+
+// Returns text plain chess board
+func ChessBoard2(width, height int, symbol rune) (board string, err error) {
+	if err = validate(width, height); err != nil {
+		return "", err
+	}
+
+	resRunes := make([]rune, 0, (width+2)*height)
+
+	for i := 0; i < height; i++ {
+		for j := 0; j < width; j++ {
+			// Detection "white" or "black" field of the chess board
+			if (i+j)%2 == 0 {
+				resRunes = append(resRunes, symbol)
+			} else {
+				resRunes = append(resRunes, ' ')
+			}
+		}
+		resRunes = append(resRunes, '\r', '\n')
+	}
+	return string(resRunes), nil
+}

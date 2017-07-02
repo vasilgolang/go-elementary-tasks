@@ -39,7 +39,7 @@ func handlerTask1(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	fmt.Printf("Values: %#v\r\n", t)
 	symbol, _ := utf8.DecodeRuneInString(t.Symbol) // symbol contains the first rune of the string
-	board, err := task1.ChessBoard(t.Width, t.Height, symbol)
+	board, err := task1.ChessBoard2(t.Width, t.Height, symbol)
 	fmt.Println(board)
 	w.Write([]byte(board))
 }
