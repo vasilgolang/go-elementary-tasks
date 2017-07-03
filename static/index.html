@@ -37,6 +37,10 @@
     }`;
         }
 
+        function TasksJson() {
+            return `{"task1":` + ConvertForm1ToJSON() + `, "task2":` + ConvertForm2ToJSON() + `}`;
+        }
+
         $(document).ready(function () {
             // click on button submit
             $("#task1_run").on('click', function () {
@@ -50,8 +54,39 @@
                     success: function (result) {
                         // you can see the result from the console
                         // tab of the developer tools
+                        var jsonResponse = JSON.parse(result);
+                        console.log(jsonResponse);
+                        console.log(jsonResponse.Err);
+                        console.log("Result:", result);
+
+                        if (jsonResponse.Err == "") {
+                            $("#result-task-1").html(jsonResponse.Board);
+                        } else {
+                            $("#result-task-1").html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
+                        }
+
+
+                    },
+                    error: function (xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                })
+            });
+
+            $("#task2_run").on('click', function () {
+                var jsonData = ConvertForm2ToJSON('formTask2');
+                console.log("jsonData:", jsonData);
+                // send ajax
+                $.ajax({
+                    url: '/task/2', // url where to submit the request
+                    type: "POST", // type of action POST || GET
+                    dataType: 'text', // data type
+                    data: jsonData, // post data || get data
+                    success: function (result) {
+                        // you can see the result from the console
+                        // tab of the developer tools
                         // "result-task-1
-                        $("#result-task-1").html(result);
+                        $("#result-task-2").html(result);
                         console.log("Result:", result);
                     },
                     error: function (xhr, resp, text) {
@@ -59,12 +94,13 @@
                     }
                 })
             });
-            $("#task2_run").on('click', function () {
-                var jsonData = ConvertForm2ToJSON('formTask2');
+
+            $("#tasks_run").on('click', function () {
+                var jsonData = TasksJson();
                 console.log("jsonData:", jsonData);
                 // send ajax
                 $.ajax({
-                    url: '/task/2', // url where to submit the request
+                    url: '/tasks/all', // url where to submit the request
                     type: "POST", // type of action POST || GET
                     dataType: 'text', // data type
                     data: jsonData, // post data || get data
@@ -106,7 +142,7 @@
         <div>
             <h4>Result</h4>
             <div class="panel-body">
-                <pre id="result-task-1">:)</pre>
+                <pre id="result-task-1"></pre>
             </div>
         </div>
     </form>
@@ -117,21 +153,25 @@
         <div>
             <div class="form-group">
                 <label for="e1width">Width:</label>
-                <input type="number" min="0" class="form-control" id="e1width" placeholder="Enter width" name="e1width">
+                <input type="number" min="0" class="form-control" id="e1width" placeholder="Enter width" name="e1width"
+                       step="0.1">
             </div>
             <div class="form-group">
                 <label for="e1height">Height:</label>
-                <input type="number" class="form-control" id="e1height" placeholder="Enter height" name="e1height">
+                <input type="number" class="form-control" id="e1height" placeholder="Enter height" name="e1height"
+                       step="0.1">
             </div>
         </div>
         <div>
             <div class="form-group">
                 <label for="e2width">Width:</label>
-                <input type="number" min="0" class="form-control" id="e2width" placeholder="Enter width" name="e2width">
+                <input type="number" min="0" class="form-control" id="e2width" placeholder="Enter width" name="e2width"
+                       step="0.1">
             </div>
             <div class="form-group">
                 <label for="e2height">Height:</label>
-                <input type="number" class="form-control" id="e2height" placeholder="Enter height" name="e2height" step="0.1">
+                <input type="number" class="form-control" id="e2height" placeholder="Enter height" name="e2height"
+                       step="0.1">
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-default" id="task2_run">Run</button>
@@ -146,6 +186,7 @@
         </div>
     </form>
 
+    <button type="button" class="btn btn-default" id="tasks_run">Run all</button>
 </div>
 
 </body>

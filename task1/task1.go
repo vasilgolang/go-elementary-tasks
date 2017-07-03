@@ -37,9 +37,9 @@ func Demo(params []Params) {
 
 // Returns error when params can't pass validation
 func validate(width, height int) (err error) {
-	// Check if width and height are positive numbers
-	if width < 0 || height < 0 {
-		return errors.New("Width and height must be more than 0")
+	// Check if width and height are positive numbers more than 0
+	if width <= 0 || height <= 0 {
+		return errors.New("Width and height must be an integer more than 0")
 	}
 	return nil
 }
