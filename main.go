@@ -1,25 +1,20 @@
 package main
 
 import (
-	"github.com/vasilgolang/go-elementary-tasks/task1"
-	"github.com/vasilgolang/go-elementary-tasks/task2"
-	"github.com/vasilgolang/go-elementary-tasks/task3"
-	"github.com/vasilgolang/go-elementary-tasks/task4"
-	"github.com/vasilgolang/go-elementary-tasks/task5"
-	"github.com/vasilgolang/go-elementary-tasks/task6"
-	"github.com/vasilgolang/go-elementary-tasks/task7"
+	_ "github.com/vasilgolang/go-elementary-tasks/task1"
+	_ "github.com/vasilgolang/go-elementary-tasks/task2"
 	"github.com/vasilgolang/go-elementary-tasks/webserver"
 )
 
-type Params struct {
-	Params1 []task1.Params `json:"task1params" xml:"task1params"`
-	Params2 []task2.Params `json:"task2params" xml:"task2params"`
-	Params3 []task3.Params `json:"task3params" xml:"task3params"`
-	Params4 []task4.Params `json:"task4params" xml:"task4params"`
-	Params5 []task5.Params `json:"task5params" xml:"task5params"`
-	Params6 []task6.Params `json:"task6params" xml:"task6params"`
-	Params7 []task7.Params `json:"task7params" xml:"task7params"`
-}
+//type Params struct {
+//	Params1 []task1.Params `json:"task1params" xml:"task1params"`
+//	Params2 []task2.Params `json:"task2params" xml:"task2params"`
+//	Params3 []task3.Params `json:"task3params" xml:"task3params"`
+//	Params4 []task4.Params `json:"task4params" xml:"task4params"`
+//	Params5 []task5.Params `json:"task5params" xml:"task5params"`
+//	Params6 []task6.Params `json:"task6params" xml:"task6params"`
+//	Params7 []task7.Params `json:"task7params" xml:"task7params"`
+//}
 
 func main() {
 

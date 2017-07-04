@@ -45,7 +45,7 @@ func handlerTask(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("You should use this route like /task/N - where N is number"))
 	}
 
-	fmt.Println("TaskNumber:", taskNumber)
+	fmt.Println("TaskNumber:", taskNumber) // debun in console
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
