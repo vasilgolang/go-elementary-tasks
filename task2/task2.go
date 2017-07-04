@@ -50,7 +50,7 @@ func Demo(param Params) (result string, err error) {
 		return "", err
 	} else {
 		if canEnclose {
-			return fmt.Sprintf("Envelopes can be enclosed. The smallest envelope is", minEnvelope), nil
+			return fmt.Sprintf("Envelopes can be enclosed. The smallest envelope is %d", minEnvelope), nil
 		} else {
 			return "", errors.New(fmt.Sprint("Envelopes can't be enclosed."))
 		}
