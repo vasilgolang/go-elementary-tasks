@@ -9,6 +9,8 @@ import (
 	"io/ioutil"
 	"unicode/utf8"
 	"github.com/vasilgolang/go-elementary-tasks/task2"
+	"strconv"
+	"github.com/vasilgolang/go-elementary-tasks/taskmanager"
 )
 
 func handlerMainPage(w http.ResponseWriter, r *http.Request) {
@@ -89,14 +91,44 @@ func handlerAllTasks(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("res:%v, minEnvelope:%v, err:%v", res, minEnvelope, err)))
 }
 
+func handlerTask(w http.ResponseWriter, r *http.Request) {
+	taskNumber, err := strconv.Atoi(r.RequestURI[len(`/task/`):])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("You should use this route like /task/N - where N is number"))
+	}
+
+	fmt.Println("TaskNumber:", taskNumber)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Errorf("ioutil.ReadAll(r.Body) Error:", err).Error()))
+
+	}
+
+	result, err := taskmanager.RunTask(taskNumber, string(body))
+
+	b, _ := json.Marshal(struct {
+		Err    string
+		Result string
+	}{
+		Err:    ErrToString(err),
+		Result: result,
+	})
+
+	w.Write(b)
+}
+
 func Run() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	http.HandleFunc("/", handlerMainPage)          // set router
-	http.HandleFunc("/task/1", handlerTask1)       // set router
-	http.HandleFunc("/task/2", handlerTask2)       // set router
-	http.HandleFunc("/tasks/all", handlerAllTasks) // set router
+	http.HandleFunc("/", handlerMainPage) // set router
+	//http.HandleFunc("/task/1", handlerTask1)       // set router
+	//http.HandleFunc("/task/2", handlerTask2)       // set router
+	//http.HandleFunc("/tasks/all", handlerAllTasks) // set router
+	http.HandleFunc("/task/", handlerTask) // set router
 
 	err := http.ListenAndServe(":9090", nil) // set listen port
 	if err != nil {

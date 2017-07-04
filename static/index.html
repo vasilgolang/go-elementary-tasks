@@ -41,59 +41,41 @@
             return `{"task1":` + ConvertForm1ToJSON() + `, "task2":` + ConvertForm2ToJSON() + `}`;
         }
 
+        function runAjax(taskNumber, jsonData) {
+            $.ajax({
+                url: '/task/'+taskNumber, // url where to submit the request
+                type: "POST", // type of action POST || GET
+                dataType: 'text', // data type
+                data: jsonData, // post data || get data
+                success: function (result) {
+                    // you can see the result from the console
+                    // tab of the developer tools
+                    var jsonResponse = JSON.parse(result);
+                    console.log(jsonResponse);
+                    console.log(jsonResponse.Err);
+                    if (jsonResponse.Err == "") {
+                        $("#result-task-"+taskNumber).html(`<pre>` + jsonResponse.Result + `</pre>`);
+                    } else {
+                        $("#result-task-"+taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
+                    }
+                },
+                error: function (xhr, resp, text) {
+//                        $("#result-task-1").html(`<div class="alert alert-danger">` + xhr.responseText + `</div>`);
+                }
+            })
+        }
         $(document).ready(function () {
             // click on button submit
             $("#task1_run").on('click', function () {
                 var jsonData = ConvertForm1ToJSON('formTask1');
-                // send ajax
-                $.ajax({
-                    url: '/task/1', // url where to submit the request
-                    type: "POST", // type of action POST || GET
-                    dataType: 'text', // data type
-                    data: jsonData, // post data || get data
-                    success: function (result) {
-                        // you can see the result from the console
-                        // tab of the developer tools
-                        var jsonResponse = JSON.parse(result);
-                        console.log(jsonResponse);
-                        console.log(jsonResponse.Err);
-                        console.log("Result:", result);
-
-                        if (jsonResponse.Err == "") {
-                            $("#result-task-1").html(jsonResponse.Board);
-                        } else {
-                            $("#result-task-1").html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
-                        }
-
-
-                    },
-                    error: function (xhr, resp, text) {
-                        console.log(xhr, resp, text);
-                    }
-                })
+                runAjax(1, jsonData)
             });
 
             $("#task2_run").on('click', function () {
                 var jsonData = ConvertForm2ToJSON('formTask2');
-                console.log("jsonData:", jsonData);
-                // send ajax
-                $.ajax({
-                    url: '/task/2', // url where to submit the request
-                    type: "POST", // type of action POST || GET
-                    dataType: 'text', // data type
-                    data: jsonData, // post data || get data
-                    success: function (result) {
-                        // you can see the result from the console
-                        // tab of the developer tools
-                        // "result-task-1
-                        $("#result-task-2").html(result);
-                        console.log("Result:", result);
-                    },
-                    error: function (xhr, resp, text) {
-                        console.log(xhr, resp, text);
-                    }
-                })
+                runAjax(2, jsonData)
             });
+
 
             $("#tasks_run").on('click', function () {
                 var jsonData = TasksJson();
@@ -140,9 +122,8 @@
         </div>
         <button type="button" class="btn btn-default" id="task1_run">Run</button>
         <div>
-            <h4>Result</h4>
             <div class="panel-body">
-                <pre id="result-task-1"></pre>
+                <div id="result-task-1"></div>
             </div>
         </div>
     </form>

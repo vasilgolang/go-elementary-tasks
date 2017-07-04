@@ -14,11 +14,26 @@ import (
 	"math"
 	"errors"
 	"fmt"
+	"encoding/json"
+	"github.com/vasilgolang/go-elementary-tasks/taskmanager"
 )
 
 type Params struct {
 	Envelope1 Envelope `json:"envelope1"`
 	Envelope2 Envelope `json:"envelope2"`
+}
+
+func JsonRunner(jsonData string) (result string, err error) {
+	var params Params
+	err = json.Unmarshal([]byte(jsonData), &params)
+	if err != nil {
+		return
+	}
+	return Demo(params)
+}
+
+func init() {
+	taskmanager.RegisterJsonRunner(2, JsonRunner)
 }
 
 // Returns error when params can't pass validation
@@ -29,21 +44,18 @@ func validate(e1, e2 Envelope) (err error) {
 	return
 }
 
-func Demo(params []Params) {
-	for _, param := range params {
-		fmt.Printf("Received params:\r\nEnvelope1: %#v\r\nEnvelope2: %#v\r\n", param.Envelope1, param.Envelope2)
-		if canEnclose, minEnvelope, err := CanEncloseEnvelopes(param.Envelope1, param.Envelope2); err != nil {
-			fmt.Println("Error:", err)
+func Demo(param Params) (result string, err error) {
+	fmt.Printf("Received params:\r\nEnvelope1: %#v\r\nEnvelope2: %#v\r\n", param.Envelope1, param.Envelope2)
+	if canEnclose, minEnvelope, err := CanEncloseEnvelopes(param.Envelope1, param.Envelope2); err != nil {
+		return "", err
+	} else {
+		if canEnclose {
+			return fmt.Sprintf("Envelopes can be enclosed. The smallest envelope is", minEnvelope), nil
 		} else {
-			if canEnclose {
-				fmt.Println("Envelopes can be enclosed. The smallest envelope is", minEnvelope)
-			} else {
-				fmt.Println("Envelopes can't be enclosed.")
-			}
+			return "", errors.New(fmt.Sprint("Envelopes can't be enclosed."))
 		}
 	}
 }
-
 
 type Envelope struct {
 	Width  float64 `json:"width"`

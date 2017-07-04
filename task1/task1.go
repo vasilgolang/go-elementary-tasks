@@ -15,6 +15,8 @@ import (
 	"errors"
 	"unicode/utf8"
 	"fmt"
+	"encoding/json"
+	"github.com/vasilgolang/go-elementary-tasks/taskmanager"
 )
 
 type Params struct {
@@ -23,15 +25,26 @@ type Params struct {
 	Symbol string  `json:"symbol" xml:"symbol"` // chess board symbol for white fields
 }
 
-func Demo(params []Params) {
-	for _, param := range params {
-		fmt.Printf("Received params:\r\nWidth: %d\r\nHeight: %d\r\nSymbol: %s\r\n", param.Width, param.Height, param.Symbol)
-		symbol, _ := utf8.DecodeRuneInString(param.Symbol) // symbol contains the first rune of the string
-		if result, err := ChessBoard(param.Width, param.Height, symbol); err != nil {
-			fmt.Println("Error:", err)
-		} else {
-			fmt.Println("Result:\r\n", result)
-		}
+func JsonRunner(jsonData string) (result string, err error) {
+	var params Params
+	err = json.Unmarshal([]byte(jsonData), &params)
+	if err != nil {
+		return
+	}
+	return Demo(params)
+}
+
+func init() {
+	taskmanager.RegisterJsonRunner(1, JsonRunner)
+}
+
+func Demo(param Params) (result string, err error) {
+	fmt.Printf("Received params:\r\nWidth: %d\r\nHeight: %d\r\nSymbol: %s\r\n", param.Width, param.Height, param.Symbol)
+	symbol, _ := utf8.DecodeRuneInString(param.Symbol) // symbol contains the first rune of the string
+	if result, err := ChessBoard(param.Width, param.Height, symbol); err != nil {
+		return "", err
+	} else {
+		return result, nil
 	}
 }
 
