@@ -43,7 +43,7 @@
 
         function runAjax(taskNumber, jsonData) {
             $.ajax({
-                url: '/task/'+taskNumber, // url where to submit the request
+                url: '/task/' + taskNumber, // url where to submit the request
                 type: "POST", // type of action POST || GET
                 dataType: 'text', // data type
                 data: jsonData, // post data || get data
@@ -54,9 +54,9 @@
                     console.log(jsonResponse);
                     console.log(jsonResponse.Err);
                     if (jsonResponse.Err == "") {
-                        $("#result-task-"+taskNumber).html(`<pre>` + jsonResponse.Result + `</pre>`);
+                        $("#result-task-" + taskNumber).html(`<pre>` + jsonResponse.Result + `</pre>`);
                     } else {
-                        $("#result-task-"+taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
+                        $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
                     }
                 },
                 error: function (xhr, resp, text) {
@@ -82,7 +82,7 @@
                 console.log("jsonData:", jsonData);
                 // send ajax
                 $.ajax({
-                    url: '/tasks/all', // url where to submit the request
+                    url: '/tasks/', // url where to submit the request
                     type: "POST", // type of action POST || GET
                     dataType: 'text', // data type
                     data: jsonData, // post data || get data
@@ -90,8 +90,33 @@
                         // you can see the result from the console
                         // tab of the developer tools
                         // "result-task-1
-                        $("#result-task-2").html(result);
-                        console.log("Result:", result);
+//                        $("#result-task-2").html(result);
+//                        console.log("Result:", result);
+
+
+                        var jsonResponse = JSON.parse(result);
+                        console.log("jsonResponse:::", jsonResponse);
+                        console.log();
+                        var keys = Object.keys(jsonResponse);
+                        for (i = 0; i < keys.length; i++) {
+                            console.log("key:", keys[i]);
+                            var taskNumber = keys[i].replace('task', '');
+                            var currentResponse = jsonResponse[keys[i]];
+                            console.log("jsonResponse", currentResponse);
+                            console.log("taskNumber", taskNumber);
+                            console.log("err", currentResponse.Err);
+                            console.log("Result", currentResponse.Result);
+
+
+                            console.log(currentResponse.Err);
+                            if (currentResponse.Err == "") {
+                                $("#result-task-" + taskNumber).html(`<pre>` + currentResponse.Result + `</pre>`);
+                            } else {
+                                $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + currentResponse.Err + `</div>`);
+                            }
+
+                        }
+
                     },
                     error: function (xhr, resp, text) {
                         console.log(xhr, resp, text);
