@@ -12,7 +12,7 @@
             var array = $("#formTask1").serializeArray();
             var json = {};
             jQuery.each(array, function () {
-                json[this.name] = this.value || '';
+                json[this.name] = this.value || '0';
             });
             return '{"width":' + json["width"] + ', "height":' + json["height"] + ', "symbol":"' + json["symbol"] + '"}';
         }
@@ -21,7 +21,7 @@
             var array = $("#formTask2").serializeArray();
             var json = {};
             jQuery.each(array, function () {
-                json[this.name] = this.value || '';
+                json[this.name] = this.value || '0';
 
             });
             console.log(json);
@@ -95,20 +95,10 @@
 
 
                         var jsonResponse = JSON.parse(result);
-                        console.log("jsonResponse:::", jsonResponse);
-                        console.log();
                         var keys = Object.keys(jsonResponse);
                         for (i = 0; i < keys.length; i++) {
-                            console.log("key:", keys[i]);
                             var taskNumber = keys[i].replace('task', '');
                             var currentResponse = jsonResponse[keys[i]];
-                            console.log("jsonResponse", currentResponse);
-                            console.log("taskNumber", taskNumber);
-                            console.log("err", currentResponse.Err);
-                            console.log("Result", currentResponse.Result);
-
-
-                            console.log(currentResponse.Err);
                             if (currentResponse.Err == "") {
                                 $("#result-task-" + taskNumber).html(`<pre>` + currentResponse.Result + `</pre>`);
                             } else {
@@ -142,7 +132,7 @@
             <input type="number" class="form-control" id="height" placeholder="Enter height" name="height">
         </div>
         <div class="form-group">
-            <label for="symbol">Height:</label>
+            <label for="symbol">Symbol:</label>
             <input type="text" class="form-control" id="symbol" placeholder="Enter symbol" name="symbol" maxlength="1">
         </div>
         <button type="button" class="btn btn-default" id="task1_run">Run</button>
