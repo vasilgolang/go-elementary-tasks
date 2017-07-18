@@ -14,7 +14,7 @@
             jQuery.each(array, function () {
                 json[this.name] = this.value || '0';
             });
-            return '{"width":' + json["width"] + ', "height":' + json["height"] + ', "symbol":"' + json["symbol"] + '"}';
+            return '{"Width":' + json["width"] + ', "Height":' + json["height"] + ', "Symbol":"' + json["symbol"] + '"}';
         }
 
         function ConvertForm2ToJSON() {
@@ -25,20 +25,32 @@
 
             });
             console.log(json);
-            return `{
-      "envelope1": {
-        "width": ` + json["e1width"] + `,
-        "height": ` + json["e1height"] + `
-      },
-      "envelope2": {
-        "width": ` + json["e2width"] + `,
-        "height": ` + json["e2height"] + `
-      }
-    }`;
+            return `
+    [
+        {
+            "Width": ` + json["e1width"] + `,
+            "Height": ` + json["e1height"] + `
+        },
+        {
+            "Width": ` + json["e2width"] + `,
+            "Height": ` + json["e2height"] + `
+        }
+    ]
+`;
+//            return `{
+//      "envelope1": {
+//        "width": ` + json["e1width"] + `,
+//        "height": ` + json["e1height"] + `
+//      },
+//      "envelope2": {
+//        "width": ` + json["e2width"] + `,
+//        "height": ` + json["e2height"] + `
+//      }
+//    }`;
         }
 
         function TasksJson() {
-            return `{"task1":` + ConvertForm1ToJSON() + `, "task2":` + ConvertForm2ToJSON() + `}`;
+            return `{"1":` + ConvertForm1ToJSON() + `, "2":` + ConvertForm2ToJSON() + `}`;
         }
 
         function runAjax(taskNumber, jsonData) {
@@ -53,10 +65,10 @@
                     var jsonResponse = JSON.parse(result);
                     console.log(jsonResponse);
                     console.log(jsonResponse.Err);
-                    if (jsonResponse.Err == "") {
-                        $("#result-task-" + taskNumber).html(`<pre>` + jsonResponse.Result + `</pre>`);
+                    if (jsonResponse.Reason == "") {
+                        $("#result-task-" + taskNumber).html(`<pre>` + jsonResponse.Resp + `</pre>`);
                     } else {
-                        $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Err + `</div>`);
+                        $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse.Reason + `</div>`);
                     }
                 },
                 error: function (xhr, resp, text) {
@@ -87,26 +99,15 @@
                     dataType: 'text', // data type
                     data: jsonData, // post data || get data
                     success: function (result) {
-                        // you can see the result from the console
-                        // tab of the developer tools
-                        // "result-task-1
-//                        $("#result-task-2").html(result);
-//                        console.log("Result:", result);
-
-
                         var jsonResponse = JSON.parse(result);
-                        var keys = Object.keys(jsonResponse);
-                        for (i = 0; i < keys.length; i++) {
-                            var taskNumber = keys[i].replace('task', '');
-                            var currentResponse = jsonResponse[keys[i]];
-                            if (currentResponse.Err == "") {
-                                $("#result-task-" + taskNumber).html(`<pre>` + currentResponse.Result + `</pre>`);
+                        for (var i = 0; i < jsonResponse.length; i++) {
+                            var taskNumber = jsonResponse[i].Task;
+                            if (jsonResponse[i].Reason == "") {
+                                $("#result-task-" + taskNumber).html(`<pre>` + jsonResponse[i].Resp + `</pre>`);
                             } else {
-                                $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + currentResponse.Err + `</div>`);
+                                $("#result-task-" + taskNumber).html(`<div class="alert alert-danger"><strong>Error: </strong>` + jsonResponse[i].Reason + `</div>`);
                             }
-
                         }
-
                     },
                     error: function (xhr, resp, text) {
                         console.log(xhr, resp, text);

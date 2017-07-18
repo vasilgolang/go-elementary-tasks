@@ -18,10 +18,7 @@ import (
 	"github.com/vasilgolang/go-elementary-tasks/taskmanager"
 )
 
-type Params struct {
-	Envelope1 Envelope `json:"envelope1"`
-	Envelope2 Envelope `json:"envelope2"`
-}
+type Params []Envelope
 
 func JsonRunner(jsonData string) (result string, err error) {
 	var params Params
@@ -45,8 +42,8 @@ func validate(e1, e2 Envelope) (err error) {
 }
 
 func Demo(param Params) (result string, err error) {
-	fmt.Printf("Received params:\r\nEnvelope1: %#v\r\nEnvelope2: %#v\r\n", param.Envelope1, param.Envelope2)
-	if canEnclose, minEnvelope, err := CanEncloseEnvelopes(param.Envelope1, param.Envelope2); err != nil {
+	fmt.Printf("Received params:\r\nEnvelope1: %#v\r\nEnvelope2: %#v\r\n", param[0], param[1])
+	if canEnclose, minEnvelope, err := CanEncloseEnvelopes(param[0], param[1]); err != nil {
 		return "", err
 	} else {
 		if canEnclose {

@@ -8,17 +8,23 @@ import (
 	"io/ioutil"
 	"strconv"
 	"github.com/vasilgolang/go-elementary-tasks/taskmanager"
-	"strings"
 )
 
 type TaskResult struct {
-	Err    string
-	Result string
+	Task   int
+	Reason string
+	Resp   string
 }
 
 func handlerMainPage(w http.ResponseWriter, r *http.Request) {
 	// redirect to static index.html
-	http.Redirect(w, r, `/static/index.html`, http.StatusSeeOther)
+	//http.Redirect(w, r, `/static/index.html`, http.StatusSeeOther)
+	if content, err := ioutil.ReadFile("./static/index.html"); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(fmt.Sprintf("Error: %s", err)))
+	} else {
+		w.Write(content)
+	}
 }
 
 func handlerAllTasks(w http.ResponseWriter, r *http.Request) {
@@ -26,32 +32,28 @@ func handlerAllTasks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Errorf("ioutil.ReadAll(r.Body) Error:%s", err)
 	}
-	//fmt.Println("body:", string(body))
 	defer r.Body.Close()
+	fmt.Println("body:", string(body))
 
-	params := map[string]json.RawMessage{}
-	err = json.Unmarshal([]byte(body), &params)
+	params := map[int]json.RawMessage{}
+	err = json.Unmarshal(body, &params)
 	if err != nil {
 		fmt.Errorf("Unmarshal Error:", err)
 	}
-	results := map[string]TaskResult{}
-	for k, v := range params {
-		sNumber := strings.Replace(k, `task`, ``, 1)
-		if i, err := strconv.Atoi(sNumber); err != nil {
-			fmt.Println("Error:", err)
-			continue
-		} else {
-			result, err := taskmanager.RunTask(i, string(v))
-			results[k] = TaskResult{
-				Result: result,
-				Err:    ErrToString(err),
-			}
-		}
+
+	results := []TaskResult{}
+	for task, jsonParams := range params {
+		result, err := taskmanager.RunTask(task, string(jsonParams))
+		results = append(results, TaskResult{
+			Task:   task,
+			Resp:   result,
+			Reason: ErrToString(err),
+		})
 
 	}
 
 	fmt.Printf("Results:\r\n%#v\r\n", results)
-	b, _:= json.Marshal(results)
+	b, _ := json.Marshal(results)
 	//fmt.Println(err, string(b))
 	w.Write(b)
 }
@@ -74,8 +76,9 @@ func handlerTask(w http.ResponseWriter, r *http.Request) {
 	result, err := taskmanager.RunTask(taskNumber, string(body))
 
 	b, _ := json.Marshal(TaskResult{
-		Err:    ErrToString(err),
-		Result: result,
+		Task:   taskNumber,
+		Reason: ErrToString(err),
+		Resp:   result,
 	})
 
 	w.Write(b)
